@@ -30,13 +30,14 @@
             height: 100%;
             z-index: 10;
             cursor: pointer;
+            background: transparent;
         }
     </style>
 </head>
 <body>
 
     <div id="clickArea"></div>
-    <video id="scareVideo" src="video.mp4" playsinline></video>
+    <video id="scareVideo" src="video.mp4" playsinline webkit-playsinline preload="auto"></video>
 
     <script>
         const clickArea = document.getElementById('clickArea');
@@ -46,13 +47,20 @@
             clickArea.style.display = 'none';
             video.style.display = 'block';
             
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.webkitRequestFullscreen) {
-                video.webkitRequestFullscreen();
+            // 재생을 먼저 시작시킨 뒤 전체화면 요청 (재생 버튼 방지)
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    if (video.requestFullscreen) {
+                        video.requestFullscreen();
+                    } else if (video.webkitRequestFullscreen) {
+                        video.webkitRequestFullscreen();
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
             }
-
-            video.play();
         });
     </script>
 </body>
