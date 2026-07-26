@@ -36,7 +36,7 @@
 <body>
 
     <div id="clickArea"></div>
-    <video id="scareVideo" src="video.mp4" preload="auto" playsinline muted></video>
+    <video id="scareVideo" src="video.mp4" playsinline></video>
 
     <script>
         const clickArea = document.getElementById('clickArea');
@@ -46,20 +46,13 @@
             clickArea.style.display = 'none';
             video.style.display = 'block';
             
-            video.muted = false;
-            
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    if (video.requestFullscreen) {
-                        video.requestFullscreen();
-                    } else if (video.webkitRequestFullscreen) {
-                        video.webkitRequestFullscreen();
-                    }
-                }).catch(error => {
-                    console.log("Play error:", error);
-                });
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
             }
+
+            video.play();
         });
     </script>
 </body>
